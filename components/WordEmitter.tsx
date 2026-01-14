@@ -376,7 +376,7 @@ export default function WordEmitter({
             maxWidth: '90vw',
             overflow: 'hidden',
             zIndex: 3,
-            fontFamily: 'monospace',
+            fontFamily: 'var(--font-recursive), monospace',
           }}
           initial={
             isBrokenOnAppear

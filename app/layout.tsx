@@ -1,5 +1,12 @@
 import type { Metadata } from 'next'
+import { Recursive } from 'next/font/google'
 import './globals.css'
+
+const recursive = Recursive({
+  subsets: ['latin'],
+  variable: '--font-recursive',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Not Today',
@@ -12,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={recursive.variable}>
       <body>{children}</body>
     </html>
   )
