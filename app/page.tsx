@@ -32,10 +32,21 @@ export default function Home() {
   const handlePointerDown = () => {
     setPressStart(Date.now())
     setPhase('pressing')
+    
+    // バイブレーション開始（スマートフォンの場合）
+    if ('vibrate' in navigator) {
+      // 長押し中は継続的に弱い振動（パターン: 振動10ms、休止20msを繰り返し）
+      navigator.vibrate([10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20])
+    }
   }
 
   const handlePointerUp = () => {
     if (pressStart === null) return
+
+    // バイブレーション停止
+    if ('vibrate' in navigator) {
+      navigator.vibrate(0)
+    }
 
     const duration = Date.now() - pressStart
     const calculatedHesitation = clamp(duration - THRESHOLD, 0, MAX_HESITATION)
@@ -68,6 +79,19 @@ export default function Home() {
       }, 100)
 
       return () => clearTimeout(timer)
+    }
+    
+    // pressingフェーズ中は継続的にバイブレーション
+    if (phase === 'pressing' && 'vibrate' in navigator) {
+      const vibrationInterval = setInterval(() => {
+        // 弱い振動パターンを繰り返し
+        navigator.vibrate([10, 20, 10, 20, 10, 20, 10, 20, 10, 20])
+      }, 600) // 600msごとに繰り返し
+      
+      return () => {
+        clearInterval(vibrationInterval)
+        navigator.vibrate(0) // クリーンアップ時に停止
+      }
     }
   }, [phase, isBPattern])
 
